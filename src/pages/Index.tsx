@@ -1,18 +1,18 @@
-
 import { useEffect, useState, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ChevronLeft, ChevronRight, CircleOff, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
 const bikeImages = ["/lovable-uploads/daa3bd28-1d42-4de8-9d04-308adf14de6d.png", "/lovable-uploads/3de39d08-0e7f-4a01-8852-cd0ffd71a503.png", "/lovable-uploads/ae2a21a8-af34-4928-98ac-2c2921d68ca2.png"];
-
 const Index = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const slideTimerRef = useRef<number | null>(null);
-  const backgroundPositionRef = useRef({ x: 0, y: 0 });
+  const backgroundPositionRef = useRef({
+    x: 0,
+    y: 0
+  });
   const requestRef = useRef<number | null>(null);
 
   // Setup automatic slideshow
@@ -32,28 +32,21 @@ const Index = () => {
       const speed = 0.05;
       backgroundPositionRef.current.x += speed;
       backgroundPositionRef.current.y += speed;
-      
       const bgElement = document.getElementById('animated-background');
       if (bgElement) {
-        bgElement.style.backgroundPosition = 
-          `${backgroundPositionRef.current.x}px ${backgroundPositionRef.current.y}px`;
+        bgElement.style.backgroundPosition = `${backgroundPositionRef.current.x}px ${backgroundPositionRef.current.y}px`;
       }
-      
       requestRef.current = requestAnimationFrame(animateBackground);
     };
-    
     requestRef.current = requestAnimationFrame(animateBackground);
-    
     return () => {
       clearTimeout(timer);
       if (slideTimerRef.current) clearInterval(slideTimerRef.current);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
   }, []);
-
   const startSlideTimer = () => {
     if (slideTimerRef.current) clearInterval(slideTimerRef.current);
-    
     slideTimerRef.current = window.setInterval(() => {
       if (!isPaused) {
         setIsAnimating(true);
@@ -62,59 +55,50 @@ const Index = () => {
       }
     }, 5000);
   };
-
   const nextImage = () => {
     setIsPaused(true); // Pause automatic slideshow when manually changing
     setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
-    
+
     setIsAnimating(true);
     setCurrentImageIndex(prev => (prev + 1) % bikeImages.length);
     setTimeout(() => setIsAnimating(false), 500);
-    
+
     // Reset the timer
     startSlideTimer();
   };
-
   const prevImage = () => {
     setIsPaused(true); // Pause automatic slideshow when manually changing
     setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
-    
+
     setIsAnimating(true);
     setCurrentImageIndex(prev => (prev - 1 + bikeImages.length) % bikeImages.length);
     setTimeout(() => setIsAnimating(false), 500);
-    
+
     // Reset the timer
     startSlideTimer();
   };
-
   const setImage = (index: number) => {
     if (index !== currentImageIndex) {
       setIsPaused(true); // Pause automatic slideshow when manually changing
       setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
-      
+
       setIsAnimating(true);
       setCurrentImageIndex(index);
       setTimeout(() => setIsAnimating(false), 500);
-      
+
       // Reset the timer
       startSlideTimer();
     }
   };
-
-  return (
-    <div className="min-h-screen overflow-hidden">
+  return <div className="min-h-screen overflow-hidden">
       {/* Animated background */}
-      <div 
-        id="animated-background" 
-        className="fixed inset-0 z-0 bg-gradient-to-br from-white to-gray-100"
-        style={{
-          backgroundImage: `
+      <div id="animated-background" className="fixed inset-0 z-0 bg-gradient-to-br from-white to-gray-100" style={{
+      backgroundImage: `
             radial-gradient(circle at 10% 20%, rgba(240, 240, 242, 0.8) 0%, rgba(230, 232, 240, 0.8) 90%),
             radial-gradient(circle at 90% 80%, rgba(245, 247, 250, 0.8) 0%, rgba(237, 241, 245, 0.8) 90%)
           `,
-          backgroundSize: '400px 400px',
-        }}
-      />
+      backgroundSize: '400px 400px'
+    }} />
       
       <Navbar />
       
@@ -152,7 +136,9 @@ const Index = () => {
                         <span className="text-sm font-semibold">95%</span>
                       </div>
                       <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-[#0EA5E9] rounded-full" style={{ width: '95%' }}></div>
+                        <div className="h-full bg-[#0EA5E9] rounded-full" style={{
+                        width: '95%'
+                      }}></div>
                       </div>
                     </div>
                     
@@ -162,7 +148,9 @@ const Index = () => {
                         <span className="text-sm font-semibold">88%</span>
                       </div>
                       <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-[#0EA5E9] rounded-full" style={{ width: '88%' }}></div>
+                        <div className="h-full bg-[#0EA5E9] rounded-full" style={{
+                        width: '88%'
+                      }}></div>
                       </div>
                     </div>
                     
@@ -182,47 +170,22 @@ const Index = () => {
               <div className="w-full lg:w-[55%] flex flex-col">
                 {/* Main product image */}
                 <div className="relative flex items-center justify-center h-[60vh] bg-[#f8f9fa] rounded-xl">
-                  <div className={cn(
-                    "transition-all duration-500 w-full h-full flex items-center justify-center",
-                    isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
-                  )}>
-                    <img 
-                      src={bikeImages[currentImageIndex]} 
-                      alt="DB7 Electric Motorcycle" 
-                      className="max-h-full max-w-full object-contain"
-                    />
+                  <div className="">
+                    <img src={bikeImages[currentImageIndex]} alt="DB7 Electric Motorcycle" className="max-h-full max-w-full object-contain" />
                   </div>
                   
-                  <button 
-                    onClick={prevImage}
-                    className="absolute left-2 sm:left-4 p-3 rounded-full bg-white/80 text-[#333] shadow-lg hover:bg-[#0EA5E9] hover:text-white transition-all z-10"
-                  >
+                  <button onClick={prevImage} className="absolute left-2 sm:left-4 p-3 rounded-full bg-white/80 text-[#333] shadow-lg hover:bg-[#0EA5E9] hover:text-white transition-all z-10">
                     <ChevronLeft size={20} />
                   </button>
                   
-                  <button 
-                    onClick={nextImage}
-                    className="absolute right-2 sm:right-4 p-3 rounded-full bg-white/80 text-[#333] shadow-lg hover:bg-[#0EA5E9] hover:text-white transition-all z-10"
-                  >
+                  <button onClick={nextImage} className="absolute right-2 sm:right-4 p-3 rounded-full bg-white/80 text-[#333] shadow-lg hover:bg-[#0EA5E9] hover:text-white transition-all z-10">
                     <ChevronRight size={20} />
                   </button>
                 </div>
                 
                 {/* Image selectors */}
                 <div className="flex justify-center mt-6 space-x-3">
-                  {bikeImages.map((_, index) => (
-                    <button 
-                      key={index}
-                      onClick={() => setImage(index)}
-                      className={cn(
-                        "w-3 h-3 rounded-full transition-all",
-                        currentImageIndex === index 
-                          ? "bg-[#0EA5E9] scale-125" 
-                          : "bg-gray-300 hover:bg-gray-400"
-                      )}
-                      aria-label={`View image ${index + 1}`}
-                    />
-                  ))}
+                  {bikeImages.map((_, index) => <button key={index} onClick={() => setImage(index)} className={cn("w-3 h-3 rounded-full transition-all", currentImageIndex === index ? "bg-[#0EA5E9] scale-125" : "bg-gray-300 hover:bg-gray-400")} aria-label={`View image ${index + 1}`} />)}
                 </div>
                 
                 {/* Product stats */}
@@ -295,17 +258,16 @@ const Index = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 interface ImageSelectorProps {
   isSelected: boolean;
   onClick: () => void;
 }
-
-const ImageSelector = ({ isSelected, onClick }: ImageSelectorProps) => {
+const ImageSelector = ({
+  isSelected,
+  onClick
+}: ImageSelectorProps) => {
   return <button onClick={onClick} className={`w-3 h-12 rounded-full ${isSelected ? 'bg-neon-blue' : 'bg-gray-700'} transition-all duration-300 ${isSelected ? 'opacity-100' : 'opacity-50 hover:opacity-80'}`} />;
 };
-
 export default Index;
