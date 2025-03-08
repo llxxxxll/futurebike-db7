@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -45,12 +45,42 @@
   }
 
   body {
-    @apply bg-[#f5f5f5] text-[#333] font-sans antialiased;
+    @apply bg-futuristic-black text-white font-sans antialiased;
   }
 
   html {
     @apply scroll-smooth;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-light;
+  }
+}
+
+/* Animation for the motorcycle entrance */
+@keyframes bike-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Glow effect for interactive elements */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px 2px rgba(34, 211, 238, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(34, 211, 238, 0.4);
+  }
+}
+
+.glow-effect {
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
 /* Custom scrollbar */
@@ -59,16 +89,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f5f5f5;
+  background: #111111;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ddd;
+  background: #333333;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ccc;
+  background: #555555;
 }
 
 /* Remove outline for non-keyboard focus */
@@ -90,4 +120,61 @@ html {
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+/* Grid background */
+.bg-grid-pattern {
+  background-size: 25px 25px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Neon text effect */
+.neon-text {
+  text-shadow: 0 0 5px rgba(34, 211, 238, 0.5), 0 0 10px rgba(34, 211, 238, 0.3);
+}
+
+/* Animated background line */
+.animated-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-line::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.8), transparent);
+  animation: line-animation 4s infinite;
+}
+
+@keyframes line-animation {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Custom animations */
+.animate-bike-entrance {
+  animation: bike-entrance 1.5s ease-out;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
