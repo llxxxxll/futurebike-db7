@@ -113,7 +113,7 @@ const Index = () => {
               {/* Center content */}
               <div className="w-full lg:w-[55%] flex flex-col">
                 {/* Main product image */}
-                <div className="relative flex items-center justify-center h-[60vh]">
+                <div className="relative flex items-center justify-center h-[60vh] bg-[#f8f9fa] rounded-xl">
                   <div className={cn(
                     "transition-all duration-500 w-full h-full flex items-center justify-center",
                     isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
