@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ChevronLeft, ChevronRight, CircleOff, Info } from 'lucide-react';
@@ -10,7 +10,12 @@ const bikeImages = ["/lovable-uploads/daa3bd28-1d42-4de8-9d04-308adf14de6d.png",
 const Index = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const slideTimerRef = useRef<number | null>(null);
+  const backgroundPositionRef = useRef({ x: 0, y: 0 });
+  const requestRef = useRef<number | null>(null);
 
+  // Setup automatic slideshow
   useEffect(() => {
     // Set page title
     document.title = 'DB7 - Next Generation Electric Motorcycle';
@@ -18,40 +23,103 @@ const Index = () => {
     // Initial animation
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 1000);
-    return () => clearTimeout(timer);
+
+    // Start the slideshow timer
+    startSlideTimer();
+
+    // Animation for background
+    const animateBackground = () => {
+      const speed = 0.05;
+      backgroundPositionRef.current.x += speed;
+      backgroundPositionRef.current.y += speed;
+      
+      const bgElement = document.getElementById('animated-background');
+      if (bgElement) {
+        bgElement.style.backgroundPosition = 
+          `${backgroundPositionRef.current.x}px ${backgroundPositionRef.current.y}px`;
+      }
+      
+      requestRef.current = requestAnimationFrame(animateBackground);
+    };
+    
+    requestRef.current = requestAnimationFrame(animateBackground);
+    
+    return () => {
+      clearTimeout(timer);
+      if (slideTimerRef.current) clearInterval(slideTimerRef.current);
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
   }, []);
 
+  const startSlideTimer = () => {
+    if (slideTimerRef.current) clearInterval(slideTimerRef.current);
+    
+    slideTimerRef.current = window.setInterval(() => {
+      if (!isPaused) {
+        setIsAnimating(true);
+        setCurrentImageIndex(prev => (prev + 1) % bikeImages.length);
+        setTimeout(() => setIsAnimating(false), 500);
+      }
+    }, 5000);
+  };
+
   const nextImage = () => {
+    setIsPaused(true); // Pause automatic slideshow when manually changing
+    setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
+    
     setIsAnimating(true);
     setCurrentImageIndex(prev => (prev + 1) % bikeImages.length);
     setTimeout(() => setIsAnimating(false), 500);
+    
+    // Reset the timer
+    startSlideTimer();
   };
 
   const prevImage = () => {
+    setIsPaused(true); // Pause automatic slideshow when manually changing
+    setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
+    
     setIsAnimating(true);
     setCurrentImageIndex(prev => (prev - 1 + bikeImages.length) % bikeImages.length);
     setTimeout(() => setIsAnimating(false), 500);
+    
+    // Reset the timer
+    startSlideTimer();
   };
 
   const setImage = (index: number) => {
     if (index !== currentImageIndex) {
+      setIsPaused(true); // Pause automatic slideshow when manually changing
+      setTimeout(() => setIsPaused(false), 10000); // Resume after 10 seconds
+      
       setIsAnimating(true);
       setCurrentImageIndex(index);
       setTimeout(() => setIsAnimating(false), 500);
+      
+      // Reset the timer
+      startSlideTimer();
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-[#333] overflow-hidden">
+    <div className="min-h-screen overflow-hidden">
+      {/* Animated background */}
+      <div 
+        id="animated-background" 
+        className="fixed inset-0 z-0 bg-gradient-to-br from-white to-gray-100"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 10% 20%, rgba(240, 240, 242, 0.8) 0%, rgba(230, 232, 240, 0.8) 90%),
+            radial-gradient(circle at 90% 80%, rgba(245, 247, 250, 0.8) 0%, rgba(237, 241, 245, 0.8) 90%)
+          `,
+          backgroundSize: '400px 400px',
+        }}
+      />
+      
       <Navbar />
       
-      <main className="pt-20">
-        <div className="w-full min-h-[85vh] relative">
-          {/* Decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#f8f9fa] to-[#e9f0f8] z-0"></div>
-          <div className="absolute w-32 h-32 rounded-full bg-[#0EA5E9]/10 blur-3xl top-1/4 left-1/4 z-0"></div>
-          <div className="absolute w-40 h-40 rounded-full bg-[#22D3EE]/10 blur-3xl bottom-1/3 right-1/3 z-0"></div>
-          
+      <main className="pt-20 relative z-10">
+        <div className="w-full min-h-[85vh] relative">          
           {/* Main content container */}
           <div className="container mx-auto px-6 lg:px-12 py-8 relative z-10">
             <div className="flex flex-row h-[80vh]">
