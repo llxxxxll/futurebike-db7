@@ -1,44 +1,32 @@
-
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import ProductNavigation from '@/components/ProductNavigation';
 import Footer from '@/components/Footer';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-
-const bikeImages = [
-  "/lovable-uploads/daa3bd28-1d42-4de8-9d04-308adf14de6d.png",
-  "/lovable-uploads/3de39d08-0e7f-4a01-8852-cd0ffd71a503.png",
-  "/lovable-uploads/ae2a21a8-af34-4928-98ac-2c2921d68ca2.png"
-];
-
+const bikeImages = ["/lovable-uploads/daa3bd28-1d42-4de8-9d04-308adf14de6d.png", "/lovable-uploads/3de39d08-0e7f-4a01-8852-cd0ffd71a503.png", "/lovable-uploads/ae2a21a8-af34-4928-98ac-2c2921d68ca2.png"];
 const Index = () => {
   const [selectedColor, setSelectedColor] = useState('silver');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  
   useEffect(() => {
     // Set page title
     document.title = 'DB7 - Next Generation Electric Motorcycle';
-    
+
     // Initial animation
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 1000);
-    
     return () => clearTimeout(timer);
   }, []);
-  
   const nextImage = () => {
     setIsAnimating(true);
-    setCurrentImageIndex((prev) => (prev + 1) % bikeImages.length);
+    setCurrentImageIndex(prev => (prev + 1) % bikeImages.length);
     setTimeout(() => setIsAnimating(false), 500);
   };
-  
   const prevImage = () => {
     setIsAnimating(true);
-    setCurrentImageIndex((prev) => (prev - 1 + bikeImages.length) % bikeImages.length);
+    setCurrentImageIndex(prev => (prev - 1 + bikeImages.length) % bikeImages.length);
     setTimeout(() => setIsAnimating(false), 500);
   };
-
   const setImage = (index: number) => {
     if (index !== currentImageIndex) {
       setIsAnimating(true);
@@ -46,13 +34,11 @@ const Index = () => {
       setTimeout(() => setIsAnimating(false), 500);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-futuristic-black text-white overflow-x-hidden">
+  return <div className="min-h-screen bg-futuristic-black text-white overflow-x-hidden">
       <div className="fixed top-0 left-0 w-full h-full bg-grid-pattern opacity-5 pointer-events-none"></div>
       <Navbar />
       <main className="relative pt-20">
-        <div className="container mx-auto px-6 lg:px-12 py-8 flex flex-col min-h-[85vh]">
+        <div className="container mx-auto px-6 lg:px-12 py-8 flex flex-col min-h-[85vh] bg-zinc-200">
           <div className="flex flex-col lg:flex-row items-center">
             <ProductNavigation />
             
@@ -65,28 +51,16 @@ const Index = () => {
                   <div className="absolute w-full h-full rounded-full bg-neon-blue/5 blur-3xl"></div>
                   
                   {/* Image */}
-                  <img 
-                    src={bikeImages[currentImageIndex]} 
-                    alt="DB7 Electric Motorcycle" 
-                    className={`w-full h-full object-contain z-10 transition-all duration-500 ${
-                      isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-                    }`}
-                  />
+                  <img src={bikeImages[currentImageIndex]} alt="DB7 Electric Motorcycle" className="" />
                 </div>
                 
                 {/* Image navigation controls */}
-                <button 
-                  onClick={prevImage}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/20 backdrop-blur-sm p-2 rounded-r-full text-white/70 hover:text-white transition z-20"
-                >
+                <button onClick={prevImage} className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/20 backdrop-blur-sm p-2 rounded-r-full text-white/70 hover:text-white transition z-20">
                   <ChevronLeft size={24} />
                 </button>
                 
-                <button 
-                  onClick={nextImage}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/20 backdrop-blur-sm p-2 rounded-l-full text-white/70 hover:text-white transition z-20"
-                >
-                  <ChevronRight size={24} />
+                <button onClick={nextImage} className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/20 backdrop-blur-sm p-2 rounded-l-full text-white/70 hover:text-white transition z-20">
+                  <ChevronRight size={24} className="bg-futuristic-silver" />
                 </button>
               </div>
               
@@ -125,34 +99,22 @@ const Index = () => {
           
           <div className="flex justify-center mt-8">
             <div className="flex items-center gap-4">
-              {bikeImages.map((_, index) => (
-                <ImageSelector 
-                  key={index}
-                  isSelected={currentImageIndex === index} 
-                  onClick={() => setImage(index)} 
-                />
-              ))}
+              {bikeImages.map((_, index) => <ImageSelector key={index} isSelected={currentImageIndex === index} onClick={() => setImage(index)} />)}
             </div>
           </div>
         </div>
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 interface ImageSelectorProps {
   isSelected: boolean;
   onClick: () => void;
 }
-
-const ImageSelector = ({ isSelected, onClick }: ImageSelectorProps) => {
-  return (
-    <button 
-      onClick={onClick}
-      className={`w-3 h-12 rounded-full ${isSelected ? 'bg-neon-blue' : 'bg-gray-700'} transition-all duration-300 ${isSelected ? 'opacity-100' : 'opacity-50 hover:opacity-80'}`}
-    />
-  );
+const ImageSelector = ({
+  isSelected,
+  onClick
+}: ImageSelectorProps) => {
+  return <button onClick={onClick} className={`w-3 h-12 rounded-full ${isSelected ? 'bg-neon-blue' : 'bg-gray-700'} transition-all duration-300 ${isSelected ? 'opacity-100' : 'opacity-50 hover:opacity-80'}`} />;
 };
-
 export default Index;
